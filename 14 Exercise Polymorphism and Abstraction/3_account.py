@@ -1,35 +1,26 @@
 class Account:
     def __init__(self, owner: str, starting_amount=0):
-        self.starting_amount = starting_amount
         self.owner = owner
         self.amount = starting_amount
         self._transactions = []
 
     def handle_transaction(self, transaction_amount):
-        if self.amount + transaction_amount >= 0:
-            self.amount += transaction_amount
+        if self.balance + transaction_amount >= 0:
             self._transactions.append(transaction_amount)
-            return f"New balance: {self.amount}"
-        else:
-            raise ValueError("sorry cannot go in debt!")
+            return f"New balance: {self.balance}"
+        raise ValueError("sorry cannot go in debt!")
 
     def add_transaction(self, amount):
         if not isinstance(amount, int):
             raise ValueError("please use int for amount")
-        else:
-            if self.amount + amount >= 0:
-                self.amount += amount
-                self._transactions.append(amount)
-                return f"New balance: {self.amount}"
-            else:
-                raise ValueError("sorry cannot go in debt!")
+        return self.handle_transaction(amount)
 
     @property
     def balance(self):
-        return sum(self._transactions)
+        return sum(self._transactions) + self.amount
 
     def __str__(self):
-        return f"Account of {self.owner} with starting amount: {self.starting_amount}"
+        return f"Account of {self.owner} with starting amount: {self.amount}"
 
     def __repr__(self):
         return f"Account({self.owner}, {self.amount})"
@@ -44,25 +35,25 @@ class Account:
         return self._transactions[::-1]
 
     def __gt__(self, other):
-        return self.amount > other.amount
+        return self.balance > other.balance
 
     def __lt__(self, other):
-        return self.amount < other.amount
+        return self.balance < other.balance
 
     def __ge__(self, other):
-        return self.amount >= other.amount
+        return self.balance >= other.balance
 
     def __le__(self, other):
-        return self.amount <= other.amount
+        return self.balance <= other.balance
 
     def __eq__(self, other):
-        return self.amount == other.amount
+        return self.balance == other.balance
 
     def __ne__(self, other):
-        return self.amount != other.amount
+        return self.balance != other.balance
 
     def __add__(self, other):
-        new_account = Account(f"{self.owner}&{other.owner}", self.starting_amount + other.starting_amount)
+        new_account = Account(f"{self.owner}&{other.owner}", self.amount + other.amount)
         new_account._transactions = self._transactions + other._transactions
 
         return new_account
