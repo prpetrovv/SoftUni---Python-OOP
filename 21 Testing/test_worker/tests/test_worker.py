@@ -1,5 +1,5 @@
 from unittest import TestCase, main
-# from worker import Worker
+from project.worker import Worker
 
 
 class WorkerTests(TestCase):
